@@ -2,7 +2,8 @@ import i18n from 'i18next';
 import { id } from './id';
 import {
   initToolGroups,
-  toolbarButtons,
+  toolbarButtons as basicToolbarButtons,
+  toolbarSections as basicToolbarSections,
   cornerstone,
   ohif,
   dicomsr,
@@ -14,12 +15,24 @@ import {
   modeInstance as basicModeInstance,
 } from '@ohif/mode-basic';
 
+import dentalToolbarButtons from '@ohif/extension-dental/src/getToolbarModule';
+
 // ---------------------------------------------------------------------------
 // Extension dependencies — everything from basic + the dental extension
 // ---------------------------------------------------------------------------
 export const extensionDependencies = {
   ...basicDependencies,
   '@ohif/extension-dental': '^0.0.1',
+};
+
+// ---------------------------------------------------------------------------
+// Toolbar — merge in dental-specific buttons and add a secondary section
+// ---------------------------------------------------------------------------
+const toolbarButtons = [...basicToolbarButtons, ...dentalToolbarButtons];
+
+const toolbarSections = {
+  ...basicToolbarSections,
+  secondary: ['DentalThemeToggle'],
 };
 
 // ---------------------------------------------------------------------------
@@ -75,6 +88,8 @@ export const modeInstance = {
   displayName: i18n.t('Modes:Dental Viewer'),
   routes: [dentalRoute],
   extensions: extensionDependencies,
+  toolbarButtons,
+  toolbarSections,
   onModeEnter,
   onModeExit,
 };
