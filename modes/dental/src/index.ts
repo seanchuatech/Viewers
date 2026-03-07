@@ -60,6 +60,7 @@ export const dentalRoute = {
   ...basicRoute,
   path: 'dental',
   layoutInstance: dentalLayout,
+  hangingProtocol: '@ohif/hp-dental-2x2',
 };
 
 // ---------------------------------------------------------------------------

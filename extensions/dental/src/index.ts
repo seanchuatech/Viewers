@@ -8,6 +8,8 @@ import './theme/DentalTheme.css';
 // Import toolbar button definitions
 import dentalToolbarButtons from './getToolbarModule';
 
+import dentalHangingProtocol from './hangingprotocols/dentalHangingProtocol';
+
 const dentalExtension = {
   /**
    * Only required property. Should be a unique value across all extensions.
@@ -15,6 +17,15 @@ const dentalExtension = {
   id,
 
   getCommandsModule,
+
+  getHangingProtocolModule() {
+    return [
+      {
+        name: dentalHangingProtocol.id,
+        protocol: dentalHangingProtocol,
+      },
+    ];
+  },
 
   getToolbarModule() {
     return dentalToolbarButtons;
