@@ -43,6 +43,29 @@ export const dentalRoute = {
 };
 
 // ---------------------------------------------------------------------------
+// Lifecycle: apply / remove dental theme
+// ---------------------------------------------------------------------------
+function onModeEnter(args) {
+  // Apply the dental theme class so CSS variables kick in
+  document.body.classList.add('dental-theme');
+
+  // Call the basic mode's onModeEnter (bound to `this` = modeInstance)
+  if (basicModeInstance.onModeEnter) {
+    basicModeInstance.onModeEnter.call(this, args);
+  }
+}
+
+function onModeExit(args) {
+  // Remove the dental theme class
+  document.body.classList.remove('dental-theme');
+
+  // Call the basic mode's onModeExit
+  if (basicModeInstance.onModeExit) {
+    basicModeInstance.onModeExit.call(this, args);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Mode instance
 // ---------------------------------------------------------------------------
 export const modeInstance = {
@@ -52,6 +75,8 @@ export const modeInstance = {
   displayName: i18n.t('Modes:Dental Viewer'),
   routes: [dentalRoute],
   extensions: extensionDependencies,
+  onModeEnter,
+  onModeExit,
 };
 
 // ---------------------------------------------------------------------------

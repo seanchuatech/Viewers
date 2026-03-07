@@ -1,0 +1,59 @@
+/*
+ * Dental Theme — CSS custom property overrides
+ *
+ * Applied via the `.dental-theme` class on <body>.
+ * Uses the same HSL-format variables as OHIF's tailwind.css
+ * so all existing components automatically pick up the new palette.
+ *
+ * Palette: teal/cyan primary, dark navy background, warm accents.
+ */
+
+.dental-theme {
+  /* ── Base surfaces ─────────────────────────────────────────── */
+  --background:        210 30% 6%;       /* very dark navy-slate      */
+  --foreground:        210 20% 96%;      /* crisp off-white text      */
+
+  /* ── Cards & popovers ──────────────────────────────────────── */
+  --card:              210 28% 10%;      /* slightly lighter than bg   */
+  --card-foreground:   210 20% 96%;
+  --popover:           210 30% 12%;
+  --popover-foreground:210 20% 96%;
+
+  /* ── Primary action colour (teal) ──────────────────────────── */
+  --primary:           174 72% 46%;      /* vivid teal                */
+  --primary-foreground:210 25% 6%;       /* dark text on teal buttons */
+
+  /* ── Secondary ─────────────────────────────────────────────── */
+  --secondary:         174 45% 26%;      /* muted teal                */
+  --secondary-foreground: 174 20% 90%;
+
+  /* ── Muted / subtle surfaces ───────────────────────────────── */
+  --muted:             210 25% 13%;
+  --muted-foreground:  200 18% 55%;
+
+  /* ── Accent (warm amber for highlights / tooth selector) ──── */
+  --accent:            174 55% 18%;
+  --accent-foreground: 210 20% 96%;
+
+  /* ── Destructive (keep red, just shift to dental palette) ─── */
+  --destructive:       0 72% 45%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* ── Borders & inputs ──────────────────────────────────────── */
+  --border:            210 18% 18%;
+  --input:             210 22% 22%;
+  --ring:              174 72% 46%;
+
+  /* ── Charts ────────────────────────────────────────────────── */
+  --chart-1:           174 72% 46%;
+  --chart-2:           36 85% 56%;
+  --chart-3:           200 65% 50%;
+  --chart-4:           280 55% 55%;
+  --chart-5:           340 65% 50%;
+
+  /* ── Highlight / neutral (OHIF-specific custom vars) ──────── */
+  --highlight:         174 72% 56%;
+  --neutral:           210 16% 52%;
+  --neutral-light:     210 40% 76%;
+  --neutral-dark:      210 20% 18%;
+}
