@@ -6,6 +6,7 @@ import { useSystem } from '@ohif/core';
 import { Toolbar, usePatientInfo } from '@ohif/extension-default';
 import { Types } from '@ohif/core';
 import { preserveQueryParameters } from '@ohif/app';
+import ToothSelector from './ToothSelector';
 
 /**
  * PracticeHeader — replaces the standard OHIF ViewerHeader.
@@ -127,6 +128,12 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
             </div>
           </div>
         </div>
+
+        {/* Separator */}
+        <div className="bg-border mx-2 h-8 w-px" />
+
+        {/* Tooth Selector */}
+        <ToothSelector />
       </div>
 
       {/* Centre — primary toolbar */}
