@@ -33,6 +33,16 @@ const toolbarButtons = [...basicToolbarButtons, ...dentalToolbarButtons];
 const toolbarSections = {
   ...basicToolbarSections,
   secondary: ['DentalThemeToggle'],
+  primary: [
+    ...(basicToolbarSections.primary || []),
+    'DentalMeasurements',
+  ],
+  DentalMeasurements: [
+    'DentalPALength',
+    'DentalCanalAngle',
+    'DentalCrownWidth',
+    'DentalRootLength',
+  ],
 };
 
 // ---------------------------------------------------------------------------
