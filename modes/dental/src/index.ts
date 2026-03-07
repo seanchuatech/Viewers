@@ -50,6 +50,7 @@ const toolbarSections = {
 // ---------------------------------------------------------------------------
 const dental = {
   layout: '@ohif/extension-dental.layoutTemplateModule.dentalViewerLayout',
+  measurements: '@ohif/extension-dental.panelModule.dentalMeasurements',
 };
 
 // ---------------------------------------------------------------------------
@@ -60,6 +61,9 @@ export const dentalLayout = {
   id: dental.layout,
   props: {
     ...basicLayout.props,
+    rightPanels: [dental.measurements],
+    rightPanelClosed: true,
+    rightPanelResizable: true,
   },
 };
 
@@ -84,11 +88,37 @@ function onModeEnter(args) {
   if (basicModeInstance.onModeEnter) {
     basicModeInstance.onModeEnter.call(this, args);
   }
+
+  // Auto-open dental measurements panel when a measurement is added
+  const { panelService, measurementService } = args.servicesManager.services;
+  if (panelService && measurementService) {
+    this._dentalPanelSubscriptions = [
+      ...panelService.addActivatePanelTriggers(
+        dental.measurements,
+        [
+          {
+            sourcePubSubService: measurementService,
+            sourceEvents: [
+              measurementService.EVENTS.MEASUREMENT_ADDED,
+              measurementService.EVENTS.RAW_MEASUREMENT_ADDED,
+            ],
+          },
+        ],
+        true
+      ),
+    ];
+  }
 }
 
 function onModeExit(args) {
   // Remove the dental theme class
   document.body.classList.remove('dental-theme');
+
+  // Unsubscribe panel triggers
+  if (this._dentalPanelSubscriptions) {
+    this._dentalPanelSubscriptions.forEach(sub => sub.unsubscribe?.());
+    this._dentalPanelSubscriptions = [];
+  }
 
   // Call the basic mode's onModeExit
   if (basicModeInstance.onModeExit) {
@@ -110,6 +140,7 @@ export const modeInstance = {
   toolbarSections,
   onModeEnter,
   onModeExit,
+  _dentalPanelSubscriptions: [],
 };
 
 // ---------------------------------------------------------------------------

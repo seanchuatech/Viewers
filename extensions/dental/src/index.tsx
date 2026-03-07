@@ -1,6 +1,8 @@
+import React from 'react';
 import { id } from './id';
 import getCommandsModule from './getCommandsModule';
 import DentalViewerLayout from './ViewerLayout/DentalViewerLayout';
+import DentalMeasurementsPanel from './panels/DentalMeasurementsPanel';
 
 // Import dental theme CSS — loaded when the extension registers
 import './theme/DentalTheme.css';
@@ -29,6 +31,24 @@ const dentalExtension = {
 
   getToolbarModule() {
     return dentalToolbarButtons;
+  },
+
+  getPanelModule({ commandsManager, servicesManager }) {
+    return [
+      {
+        name: 'dentalMeasurements',
+        iconName: 'tab-linear-measurement',
+        iconLabel: 'Dental Measurements',
+        label: 'Dental Measurements',
+        component: props => (
+          <DentalMeasurementsPanel
+            {...props}
+            commandsManager={commandsManager}
+            servicesManager={servicesManager}
+          />
+        ),
+      },
+    ];
   },
 
   getLayoutTemplateModule({ servicesManager, extensionManager, commandsManager, hotkeysManager }) {
