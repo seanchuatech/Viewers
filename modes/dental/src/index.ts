@@ -36,11 +36,18 @@ const toolbarSections = {
 };
 
 // ---------------------------------------------------------------------------
-// Layout — re-use the basic layout for now (will be replaced in Phase A5)
+// Namespace constants for the dental extension layout
+// ---------------------------------------------------------------------------
+const dental = {
+  layout: '@ohif/extension-dental.layoutTemplateModule.dentalViewerLayout',
+};
+
+// ---------------------------------------------------------------------------
+// Layout — uses PracticeHeader via DentalViewerLayout
 // ---------------------------------------------------------------------------
 export const dentalLayout = {
   ...basicLayout,
-  id: ohif.layout,
+  id: dental.layout,
   props: {
     ...basicLayout.props,
   },
