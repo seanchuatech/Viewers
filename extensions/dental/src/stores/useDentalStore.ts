@@ -13,6 +13,11 @@ interface DentalState {
   toggleDentalTheme: () => void;
 }
 
+/**
+ * DentalStore — manages state for the dental extension.
+ * Note: DOM manipulation (adding/removing .dental-theme) is handled
+ * by commands and mode lifecycle hooks to avoid double-toggling issues.
+ */
 export const useDentalStore = create<DentalState>((set) => ({
   selectedTooth: null,
   numberingSystem: 'FDI',
@@ -24,24 +29,8 @@ export const useDentalStore = create<DentalState>((set) => ({
       numberingSystem: state.numberingSystem === 'FDI' ? 'Universal' : 'FDI',
     })),
   setDentalTheme: (isDentalTheme) => {
-    console.log('[useDentalStore] setDentalTheme:', isDentalTheme);
-    if (isDentalTheme) {
-      document.body.classList.add('dental-theme');
-    } else {
-      document.body.classList.remove('dental-theme');
-    }
     set({ isDentalTheme });
   },
   toggleDentalTheme: () =>
-    set((state) => {
-      const next = !state.isDentalTheme;
-      console.log(`[useDentalStore] toggleDentalTheme clicked. Current: ${state.isDentalTheme}, Next: ${next}`);
-      if (next) {
-        document.body.classList.add('dental-theme');
-      } else {
-        document.body.classList.remove('dental-theme');
-      }
-      return { isDentalTheme: next };
-    }),
+    set((state) => ({ isDentalTheme: !state.isDentalTheme })),
 }));
-

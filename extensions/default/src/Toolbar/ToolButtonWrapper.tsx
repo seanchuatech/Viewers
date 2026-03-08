@@ -7,7 +7,7 @@ export default function ToolButtonWrapper(props) {
   const Icon = <Icons.ByName name={props.icon} />;
 
   return (
-    <div>
+    <div className="flex items-center justify-center h-full">
       {IconContainer ? (
         <IconContainer
           disabled={props.disabled}

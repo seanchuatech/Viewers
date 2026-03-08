@@ -36,11 +36,11 @@ const toolbarSections = {
 };
 
 // ---------------------------------------------------------------------------
-// Layout — re-use the basic layout for now (will be replaced in Phase A5)
+// Layout — use the custom dental layout template
 // ---------------------------------------------------------------------------
 export const dentalLayout = {
   ...basicLayout,
-  id: ohif.layout,
+  id: '@ohif/extension-dental.layoutTemplateModule.dentalViewerLayout',
   props: {
     ...basicLayout.props,
   },

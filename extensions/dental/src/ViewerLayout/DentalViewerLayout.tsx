@@ -6,13 +6,11 @@ import SidePanelWithServices from '@ohif/extension-default/src/Components/SidePa
 import { Onboarding, ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@ohif/ui-next';
 import useResizablePanels from '@ohif/extension-default/src/ViewerLayout/ResizablePanelsHook';
 
-import PracticeHeader from '../components/PracticeHeader';
-
 const resizableHandleClassName = 'mt-[1px] bg-background';
 
 /**
  * DentalViewerLayout — identical to the default ViewerLayout
- * except it renders the PracticeHeader instead of ViewerHeader.
+ * except it renders a custom header.
  */
 function DentalViewerLayout({
   extensionManager,
@@ -21,6 +19,7 @@ function DentalViewerLayout({
   commandsManager,
   viewports,
   ViewportGridComp,
+  Header: HeaderComponent, // Receive Header as a component
   leftPanelClosed = false,
   rightPanelClosed = false,
   leftPanelResizable = false,
@@ -29,7 +28,7 @@ function DentalViewerLayout({
   rightPanelInitialExpandedWidth,
   leftPanelMinimumExpandedWidth,
   rightPanelMinimumExpandedWidth,
-}: withAppTypes<{ ViewportGridComp: React.ComponentType<any> }>): React.ReactElement {
+}: withAppTypes<{ ViewportGridComp: React.ComponentType<any>; Header: React.ComponentType<any> }>): React.ReactElement {
   const [appConfig] = useAppConfig();
 
   const { panelService, hangingProtocolService, customizationService } = servicesManager.services;
@@ -137,8 +136,8 @@ function DentalViewerLayout({
 
   return (
     <div>
-      {/* ── Practice Header (replaces default ViewerHeader) ──── */}
-      <PracticeHeader appConfig={appConfig} />
+      {/* ── Practice Header (passed in as HeaderComponent) ──── */}
+      {HeaderComponent && <HeaderComponent appConfig={appConfig} />}
 
       <div
         className="relative flex w-full flex-row flex-nowrap items-stretch overflow-hidden bg-background"
