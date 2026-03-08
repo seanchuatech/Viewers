@@ -692,7 +692,7 @@ function commandsModule({
      * in the future with ability to set other site information.
      */
     updateMeasurement: props => {
-      const { code, uid, textLabel, label } = props;
+      const { code, uid, textLabel, label, ...rest } = props;
       let { style } = props;
       const measurement = measurementService.getMeasurement(uid);
       if (!measurement) {
@@ -701,6 +701,7 @@ function commandsModule({
       }
       const updatedMeasurement = {
         ...measurement,
+        ...rest,
       };
       // Call it textLabel as the label value
       // TODO - remove the label setting when direct rendering of findingSites is enabled

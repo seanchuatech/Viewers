@@ -13,7 +13,8 @@ function getCommandsModule({ commandsManager, servicesManager }) {
      * `.dental-theme` class on `document.body`.
      */
     toggleDentalTheme: () => {
-      document.body.classList.toggle('dental-theme');
+      console.log('[DentalCommands] toggleDentalTheme command fired');
+      useDentalStore.getState().toggleDentalTheme();
     },
 
     /**
@@ -106,7 +107,7 @@ function getCommandsModule({ commandsManager, servicesManager }) {
     },
   };
 
-  return { actions, definitions };
+  return { actions, definitions, defaultContext: 'CORNERSTONE' };
 }
 
 export default getCommandsModule;

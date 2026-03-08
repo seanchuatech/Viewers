@@ -77,12 +77,14 @@ export const dentalRoute = {
   hangingProtocol: '@ohif/hp-dental-2x2',
 };
 
+import { useDentalStore } from '@ohif/extension-dental/src/stores/useDentalStore';
+
 // ---------------------------------------------------------------------------
 // Lifecycle: apply / remove dental theme
 // ---------------------------------------------------------------------------
 function onModeEnter(args) {
-  // Apply the dental theme class so CSS variables kick in
-  document.body.classList.add('dental-theme');
+  // Apply the dental theme via store
+  useDentalStore.getState().setDentalTheme(true);
 
   // Call the basic mode's onModeEnter (bound to `this` = modeInstance)
   if (basicModeInstance.onModeEnter) {
@@ -111,8 +113,8 @@ function onModeEnter(args) {
 }
 
 function onModeExit(args) {
-  // Remove the dental theme class
-  document.body.classList.remove('dental-theme');
+  // Remove the dental theme via store
+  useDentalStore.getState().setDentalTheme(false);
 
   // Unsubscribe panel triggers
   if (this._dentalPanelSubscriptions) {

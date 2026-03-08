@@ -7,6 +7,7 @@ import { Toolbar, usePatientInfo } from '@ohif/extension-default';
 import { Types } from '@ohif/core';
 import { preserveQueryParameters } from '@ohif/app';
 import ToothSelector from './ToothSelector';
+import { useDentalStore } from '../stores/useDentalStore';
 
 /**
  * PracticeHeader — replaces the standard OHIF ViewerHeader.
@@ -21,6 +22,7 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
   const { servicesManager, extensionManager, commandsManager } = useSystem();
   const { customizationService } = servicesManager.services;
   const { patientInfo } = usePatientInfo();
+  const isDentalTheme = useDentalStore(state => state.isDentalTheme);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,7 +109,11 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
 
         {/* Practice branding */}
         <div className="flex items-center gap-2">
-          <span className="text-primary text-lg font-bold tracking-wide">🦷</span>
+          {isDentalTheme ? (
+            <span className="text-primary text-lg font-bold tracking-wide">🦷</span>
+          ) : (
+            <Icons.OHIFLogo className="text-primary h-6" />
+          )}
           <span className="text-foreground text-sm font-semibold">Dental Practice</span>
         </div>
 
@@ -116,7 +122,11 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
 
         {/* Patient info */}
         <div className="flex items-center gap-2">
-          <Icons.Patient className="text-primary h-4 w-4" />
+          {isDentalTheme ? (
+            <Icons.Patient className="text-secondary h-4 w-4" />
+          ) : (
+            <Icons.Patient className="text-primary h-4 w-4" />
+          )}
           <div className="flex flex-col leading-tight">
             <span className="text-foreground text-[13px] font-bold">
               {patientInfo.PatientName || 'Unknown Patient'}

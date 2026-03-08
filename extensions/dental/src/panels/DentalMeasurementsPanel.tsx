@@ -32,7 +32,16 @@ function DentalMeasurementsPanel({
   const refreshMeasurements = () => {
     const all = measurementService.getMeasurements();
     const rows: MeasurementRow[] = all.map(m => {
-      const displayText = Array.isArray(m.displayText) ? m.displayText : [];
+      let displayText = [];
+      if (Array.isArray(m.displayText)) {
+        displayText = m.displayText;
+      } else if (m.displayText && typeof m.displayText === 'object') {
+        displayText = [
+          ...(m.displayText.primary || []),
+          ...(m.displayText.secondary || []),
+        ];
+      }
+
       // Try to extract a numeric value from displayText
       const numericMatch = displayText.join(' ').match(/([\d.]+)\s*(mm|°|cm)?/);
       return {
