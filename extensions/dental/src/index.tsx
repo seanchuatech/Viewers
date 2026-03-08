@@ -1,7 +1,10 @@
+import { Types } from '@ohif/core';
 import React from 'react';
 import { id } from './id';
 import getCommandsModule from './getCommandsModule';
 import DentalViewerLayout from './ViewerLayout/DentalViewerLayout';
+import PracticeHeader from './components/PracticeHeader';
+import dentalHangingProtocol from './hangingprotocols/dentalHangingProtocol';
 import DentalMeasurementsPanel from './panels/DentalMeasurementsPanel';
 
 // Import dental theme CSS — loaded when the extension registers
@@ -10,24 +13,13 @@ import './theme/DentalTheme.css';
 // Import toolbar button definitions
 import dentalToolbarButtons from './getToolbarModule';
 
-import dentalHangingProtocol from './hangingprotocols/dentalHangingProtocol';
-
-const dentalExtension = {
+const dentalExtension: Types.Extensions.Extension = {
   /**
    * Only required property. Should be a unique value across all extensions.
    */
   id,
 
   getCommandsModule,
-
-  getHangingProtocolModule() {
-    return [
-      {
-        name: dentalHangingProtocol.id,
-        protocol: dentalHangingProtocol,
-      },
-    ];
-  },
 
   getToolbarModule() {
     return dentalToolbarButtons;
@@ -51,6 +43,15 @@ const dentalExtension = {
     ];
   },
 
+  getHangingProtocolModule() {
+    return [
+      {
+        name: 'dental-2x2',
+        protocol: dentalHangingProtocol,
+      },
+    ];
+  },
+
   getLayoutTemplateModule({ servicesManager, extensionManager, commandsManager, hotkeysManager }) {
     function DentalViewerLayoutWithServices(props) {
       return DentalViewerLayout({
@@ -58,6 +59,7 @@ const dentalExtension = {
         extensionManager,
         commandsManager,
         hotkeysManager,
+        Header: PracticeHeader, // Pass the custom header
         ...props,
       });
     }

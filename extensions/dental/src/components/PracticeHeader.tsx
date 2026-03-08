@@ -12,6 +12,10 @@ import { useDentalStore } from '../stores/useDentalStore';
 // We import these from the default extension's specific paths since they aren't exported from index
 import HeaderPatientInfo, { PatientInfoVisibility } from '@ohif/extension-default/src/ViewerLayout/HeaderPatientInfo/HeaderPatientInfo';
 
+const ToothIcon = () => (
+  <span className="text-xl mr-1">🦷</span>
+);
+
 /**
  * PracticeHeader — replaces the standard OHIF ViewerHeader.
  * Uses the standard Header component to ensure toolbar functionality.
@@ -91,13 +95,13 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
   // ── Custom Logo / Branding ──────────────────────────────────
   const whiteLabeling = {
     createLogoComponentFn: () => (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap">
         {isDentalTheme ? (
-          <span className="text-xl">🦷</span>
+          <ToothIcon />
         ) : (
-          <Icons.OHIFLogo />
+          <Icons.OHIFLogo className="w-8 h-8" />
         )}
-        <span className="text-foreground text-sm font-semibold">Dental Practice</span>
+        <span className="text-foreground text-sm font-semibold truncate">Dental Practice</span>
       </div>
     ),
   };
@@ -110,10 +114,10 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
       onClickReturnButton={onClickReturnButton}
       WhiteLabeling={whiteLabeling}
       Secondary={<Toolbar buttonSection="secondary" />}
-      SecondaryClassName="!left-[160px]" // Move secondary toolbar slightly to the left
+      SecondaryClassName="!left-[200px]" // Move secondary toolbar further right to avoid logo overlap
       PatientInfo={
         <div className="flex items-center gap-4 mr-4">
-           {/* Move ToothSelector to the right side, before patient info */}
+           {/* ToothSelector on the right side, before patient info */}
            <ToothSelector />
            {appConfig.showPatientInfo !== PatientInfoVisibility.DISABLED && (
              <HeaderPatientInfo
@@ -127,21 +131,21 @@ function PracticeHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config
         <div className="text-primary flex cursor-pointer items-center">
           <Button
             variant="ghost"
-            className="hover:bg-muted"
+            className="hover:bg-muted h-8 w-8 p-0 flex items-center justify-center"
             onClick={() => {
               commandsManager.run('undo');
             }}
           >
-            <Icons.Undo className="" />
+            <Icons.Undo />
           </Button>
           <Button
             variant="ghost"
-            className="hover:bg-muted"
+            className="hover:bg-muted h-8 w-8 p-0 flex items-center justify-center"
             onClick={() => {
               commandsManager.run('redo');
             }}
           >
-            <Icons.Redo className="" />
+            <Icons.Redo />
           </Button>
         </div>
       }

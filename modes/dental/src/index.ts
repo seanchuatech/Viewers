@@ -33,6 +33,7 @@ const toolbarButtons = [...basicToolbarButtons, ...dentalToolbarButtons];
 
 const toolbarSections = {
   ...basicToolbarSections,
+  primary: [...basicToolbarSections.primary, 'DentalMeasurements'],
   secondary: ['DentalThemeToggle'],
 };
 
@@ -44,6 +45,7 @@ export const dentalLayout = {
   id: '@ohif/extension-dental.layoutTemplateModule.dentalViewerLayout',
   props: {
     ...basicLayout.props,
+    rightPanels: ['@ohif/extension-dental.panelModule.dentalMeasurements'],
   },
 };
 
@@ -60,10 +62,21 @@ export const dentalRoute = {
 // Lifecycle: apply / remove dental theme
 // ---------------------------------------------------------------------------
 function onModeEnter(args) {
+  const { servicesManager } = args;
+  const { measurementService, panelService } = servicesManager.services;
+
   // Apply the dental theme class
   document.body.classList.add('dental-theme');
   // Sync the store so the header logo is correct
   useDentalStore.getState().setDentalTheme(true);
+
+  // Auto-open dental measurements panel when a measurement is added
+  this.measurementAddedUnsubscribe = measurementService.subscribe(
+    measurementService.EVENTS.MEASUREMENT_ADDED,
+    () => {
+      panelService.activatePanel('dentalMeasurements');
+    }
+  );
 
   // Call the basic mode's onModeEnter (bound to `this` = modeInstance)
   if (basicModeInstance.onModeEnter) {
@@ -76,6 +89,11 @@ function onModeExit(args) {
   document.body.classList.remove('dental-theme');
   // Sync the store
   useDentalStore.getState().setDentalTheme(false);
+
+  // Unsubscribe from measurement events
+  if (this.measurementAddedUnsubscribe) {
+    this.measurementAddedUnsubscribe.unsubscribe();
+  }
 
   // Call the basic mode's onModeExit
   if (basicModeInstance.onModeExit) {

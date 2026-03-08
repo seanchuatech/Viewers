@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": "OHIF/Viewers",
   "main": "dist/ohif-extension-dental.umd.js",
-  "module": "src/index.ts",
+  "module": "src/index.tsx",
   "engines": {
     "node": ">=14",
     "npm": ">=6",

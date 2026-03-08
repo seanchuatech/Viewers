@@ -74,7 +74,11 @@ function Header({
             >
               {isReturnEnabled && <Icons.ArrowLeft className="text-primary ml-1 h-7 w-7" />}
               <div className="ml-1">
-                {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Icons.OHIFLogo />}
+                {WhiteLabeling?.createLogoComponentFn ? (
+                  WhiteLabeling.createLogoComponentFn(React, props)
+                ) : (
+                  <Icons.OHIFLogo />
+                )}
               </div>
             </div>
           </div>
