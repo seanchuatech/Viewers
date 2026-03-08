@@ -57,8 +57,3 @@
   --neutral-light:     210 40% 76%;
   --neutral-dark:      210 20% 18%;
 }
-
-/* ── Typography Override ───────────────────────────────────── */
-.dental-theme, .dental-theme *:not(code):not([class*="font-mono"]) {
-  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif !important;
-}

@@ -33,37 +33,16 @@ const toolbarButtons = [...basicToolbarButtons, ...dentalToolbarButtons];
 const toolbarSections = {
   ...basicToolbarSections,
   secondary: ['DentalThemeToggle'],
-  primary: [
-    ...(basicToolbarSections.primary || []),
-    'DentalMeasurements',
-  ],
-  DentalMeasurements: [
-    'DentalPALength',
-    'DentalCanalAngle',
-    'DentalCrownWidth',
-    'DentalRootLength',
-  ],
 };
 
 // ---------------------------------------------------------------------------
-// Namespace constants for the dental extension layout
-// ---------------------------------------------------------------------------
-const dental = {
-  layout: '@ohif/extension-dental.layoutTemplateModule.dentalViewerLayout',
-  measurements: '@ohif/extension-dental.panelModule.dentalMeasurements',
-};
-
-// ---------------------------------------------------------------------------
-// Layout — uses PracticeHeader via DentalViewerLayout
+// Layout — re-use the basic layout for now (will be replaced in Phase A5)
 // ---------------------------------------------------------------------------
 export const dentalLayout = {
   ...basicLayout,
-  id: dental.layout,
+  id: ohif.layout,
   props: {
     ...basicLayout.props,
-    rightPanels: [dental.measurements],
-    rightPanelClosed: true,
-    rightPanelResizable: true,
   },
 };
 
@@ -74,53 +53,24 @@ export const dentalRoute = {
   ...basicRoute,
   path: 'dental',
   layoutInstance: dentalLayout,
-  hangingProtocol: '@ohif/hp-dental-2x2',
 };
-
-import { useDentalStore } from '@ohif/extension-dental/src/stores/useDentalStore';
 
 // ---------------------------------------------------------------------------
 // Lifecycle: apply / remove dental theme
 // ---------------------------------------------------------------------------
 function onModeEnter(args) {
-  // Apply the dental theme via store
-  useDentalStore.getState().setDentalTheme(true);
+  // Apply the dental theme class so CSS variables kick in
+  document.body.classList.add('dental-theme');
 
   // Call the basic mode's onModeEnter (bound to `this` = modeInstance)
   if (basicModeInstance.onModeEnter) {
     basicModeInstance.onModeEnter.call(this, args);
   }
-
-  // Auto-open dental measurements panel when a measurement is added
-  const { panelService, measurementService } = args.servicesManager.services;
-  if (panelService && measurementService) {
-    this._dentalPanelSubscriptions = [
-      ...panelService.addActivatePanelTriggers(
-        dental.measurements,
-        [
-          {
-            sourcePubSubService: measurementService,
-            sourceEvents: [
-              measurementService.EVENTS.MEASUREMENT_ADDED,
-              measurementService.EVENTS.RAW_MEASUREMENT_ADDED,
-            ],
-          },
-        ],
-        true
-      ),
-    ];
-  }
 }
 
 function onModeExit(args) {
-  // Remove the dental theme via store
-  useDentalStore.getState().setDentalTheme(false);
-
-  // Unsubscribe panel triggers
-  if (this._dentalPanelSubscriptions) {
-    this._dentalPanelSubscriptions.forEach(sub => sub.unsubscribe?.());
-    this._dentalPanelSubscriptions = [];
-  }
+  // Remove the dental theme class
+  document.body.classList.remove('dental-theme');
 
   // Call the basic mode's onModeExit
   if (basicModeInstance.onModeExit) {
@@ -142,7 +92,6 @@ export const modeInstance = {
   toolbarSections,
   onModeEnter,
   onModeExit,
-  _dentalPanelSubscriptions: [],
 };
 
 // ---------------------------------------------------------------------------

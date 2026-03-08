@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": "OHIF/Viewers",
   "main": "dist/ohif-extension-dental.umd.js",
-  "module": "src/index.tsx",
+  "module": "src/index.ts",
   "engines": {
     "node": ">=14",
     "npm": ">=6",
@@ -36,7 +36,6 @@
     "react": "18.3.1"
   },
   "dependencies": {
-    "@babel/runtime": "7.28.2",
-    "zustand": "^5.0.11"
+    "@babel/runtime": "7.28.2"
   }
 }
