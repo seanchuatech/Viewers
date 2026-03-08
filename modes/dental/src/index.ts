@@ -16,6 +16,7 @@ import {
 } from '@ohif/mode-basic';
 
 import dentalToolbarButtons from '@ohif/extension-dental/src/getToolbarModule';
+import { useDentalStore } from '@ohif/extension-dental/src/stores/useDentalStore';
 
 // ---------------------------------------------------------------------------
 // Extension dependencies — everything from basic + the dental extension
@@ -59,8 +60,10 @@ export const dentalRoute = {
 // Lifecycle: apply / remove dental theme
 // ---------------------------------------------------------------------------
 function onModeEnter(args) {
-  // Apply the dental theme class so CSS variables kick in
+  // Apply the dental theme class
   document.body.classList.add('dental-theme');
+  // Sync the store so the header logo is correct
+  useDentalStore.getState().setDentalTheme(true);
 
   // Call the basic mode's onModeEnter (bound to `this` = modeInstance)
   if (basicModeInstance.onModeEnter) {
@@ -71,6 +74,8 @@ function onModeEnter(args) {
 function onModeExit(args) {
   // Remove the dental theme class
   document.body.classList.remove('dental-theme');
+  // Sync the store
+  useDentalStore.getState().setDentalTheme(false);
 
   // Call the basic mode's onModeExit
   if (basicModeInstance.onModeExit) {
@@ -88,6 +93,7 @@ export const modeInstance = {
   displayName: i18n.t('Modes:Dental Viewer'),
   routes: [dentalRoute],
   extensions: extensionDependencies,
+  hangingProtocol: 'dental-2x2',
   toolbarButtons,
   toolbarSections,
   onModeEnter,

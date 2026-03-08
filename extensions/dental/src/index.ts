@@ -3,6 +3,7 @@ import { id } from './id';
 import getCommandsModule from './getCommandsModule';
 import DentalViewerLayout from './ViewerLayout/DentalViewerLayout';
 import PracticeHeader from './components/PracticeHeader';
+import dentalHangingProtocol from './hangingprotocols/dentalHangingProtocol';
 
 // Import dental theme CSS — loaded when the extension registers
 import './theme/DentalTheme.css';
@@ -20,6 +21,15 @@ const dentalExtension: Types.Extensions.Extension = {
 
   getToolbarModule() {
     return dentalToolbarButtons;
+  },
+
+  getHangingProtocolModule() {
+    return [
+      {
+        name: 'dental-2x2',
+        protocol: dentalHangingProtocol,
+      },
+    ];
   },
 
   getLayoutTemplateModule({ servicesManager, extensionManager, commandsManager, hotkeysManager }) {

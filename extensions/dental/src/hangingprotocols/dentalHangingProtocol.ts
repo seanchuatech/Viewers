@@ -1,7 +1,7 @@
 import { Types } from '@ohif/core';
 
 export const dentalHangingProtocol: Types.HangingProtocol.Protocol = {
-  id: '@ohif/hp-dental-2x2',
+  id: 'dental-2x2',
   description: 'Dental 2x2 grid',
   name: 'Dental 2x2',
   protocolMatchingRules: [
