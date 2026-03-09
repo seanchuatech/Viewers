@@ -17,6 +17,7 @@ import {
 
 import dentalToolbarButtons from '@ohif/extension-dental/src/getToolbarModule';
 import { useDentalStore } from '@ohif/extension-dental/src/stores/useDentalStore';
+import { persistenceService } from '@ohif/extension-dental/src/services/persistenceService';
 
 // ---------------------------------------------------------------------------
 // Extension dependencies — everything from basic + the dental extension
@@ -78,6 +79,40 @@ function onModeEnter(args) {
     }
   );
 
+  // --- Persistence Logic ---
+  
+  const dataSource = args.extensionManager.getActiveDataSourceOrNull();
+  const query = new URLSearchParams(window.location.search);
+  const studyInstanceUIDs = dataSource?.getStudyInstanceUIDs({ params: {}, query });
+  const StudyInstanceUID = studyInstanceUIDs?.[0];
+  
+  if (StudyInstanceUID) {
+    // 1. Hydrate (Load)
+    persistenceService.loadMeasurements(StudyInstanceUID).then(measurements => {
+      if (measurements && measurements.length > 0) {
+        measurements.forEach(m => {
+          measurementService.addMeasurement(m.toolName, m.viewportId, m.data);
+        });
+      }
+    });
+
+    // 2. Auto-save (Debounced)
+    let saveTimeout;
+    const debouncedSave = () => {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        const measurements = measurementService.getMeasurements();
+        persistenceService.saveMeasurements(StudyInstanceUID, measurements);
+      }, 1000);
+    };
+
+    this.persistenceUnsubscribes = [
+      measurementService.subscribe(measurementService.EVENTS.MEASUREMENT_ADDED, debouncedSave),
+      measurementService.subscribe(measurementService.EVENTS.MEASUREMENT_UPDATED, debouncedSave),
+      measurementService.subscribe(measurementService.EVENTS.MEASUREMENT_REMOVED, debouncedSave),
+    ];
+  }
+
   // Call the basic mode's onModeEnter (bound to `this` = modeInstance)
   if (basicModeInstance.onModeEnter) {
     basicModeInstance.onModeEnter.call(this, args);
@@ -93,6 +128,10 @@ function onModeExit(args) {
   // Unsubscribe from measurement events
   if (this.measurementAddedUnsubscribe) {
     this.measurementAddedUnsubscribe.unsubscribe();
+  }
+
+  if (this.persistenceUnsubscribes) {
+    this.persistenceUnsubscribes.forEach(unsub => unsub.unsubscribe());
   }
 
   // Call the basic mode's onModeExit

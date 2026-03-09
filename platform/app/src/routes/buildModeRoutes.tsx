@@ -1,5 +1,7 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import ModeRoute from '@routes/Mode';
+import LoginScreen from './LoginScreen';
 
 /*
   Routes uniquely define an entry point to:
@@ -39,7 +41,7 @@ export default function buildModeRoutes({
     }
   });
 
-  modes.forEach(mode => {
+  modes.forEach((mode: any) => {
     // todo: for each route. add route to path.
     dataSourceNames.forEach(dataSourceName => {
       const path = `${mode.routeName}/${dataSourceName}`;
@@ -68,21 +70,39 @@ export default function buildModeRoutes({
     const path = `${mode.routeName}`;
 
     // TODO move up.
-    const children = () => (
-      <ModeRoute
-        mode={mode}
-        extensionManager={extensionManager}
-        servicesManager={servicesManager}
-        commandsManager={commandsManager}
-        hotkeysManager={hotkeysManager}
-      />
-    );
+    const children = () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const studyInstanceUIDs = searchParams.get('StudyInstanceUIDs');
+
+      // Custom auth for dental mode
+      if (mode.routeName === 'dental') {
+        const token = localStorage.getItem('dental_token');
+        if (!token) {
+          return <LoginScreen />;
+        }
+
+        if (!studyInstanceUIDs) {
+          return <Navigate to="/" replace />;
+        }
+      }
+
+      return (
+        <ModeRoute
+          mode={mode}
+          extensionManager={extensionManager}
+          servicesManager={servicesManager}
+          commandsManager={commandsManager}
+          hotkeysManager={hotkeysManager}
+        />
+      );
+    };
 
     routes.push({
       path,
       children,
       private: true,
     });
+    console.log(`buildModeRoutes: registered route for mode/${mode.routeName}: ${path}`);
   });
 
   return routes;
